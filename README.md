@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Hadi | GSAP Animated Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- GSAP Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/EasePack.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #0a0a14;
+            --darker: #050510;
+            --light: #ffffff;
+            --accent: #fd79a8;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff9d;
+            --cyber-yellow: #fff200;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-text {
+            font-size: 4rem;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--cyber-yellow));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(108, 92, 231, 0.2);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 5px 0;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-blue);
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover::before {
+            transform: translateX(0);
+        }
+
+        .nav-links a.active {
+            color: var(--neon-blue);
+        }
+
+        .nav-links a.active::before {
+            transform: translateX(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .hero-title span {
+            display: inline-block;
+            opacity: 0;
+        }
+
+        .hero-subtitle {
+            font-size: 2.5rem;
+            color: var(--neon-blue);
+            margin-bottom: 2rem;
+            opacity: 0;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            opacity: 0;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button i {
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover i {
+            transform: translateX(10px);
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            opacity: 0.1;
+            filter: blur(20px);
+        }
+
+        /* About Section */
+        .section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 5rem;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--neon-blue), transparent);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-text {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .about-text h3 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--neon-blue);
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill {
+            padding: 0.8rem 1.5rem;
+            background: rgba(108, 92, 231, 0.1);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 30px;
+            color: var(--secondary);
+            font-weight: 500;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 20px 40px rgba(0, 243, 255, 0.2);
+        }
+
+        .project-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .project-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: rgba(253, 121, 168, 0.1);
+            border: 1px solid rgba(253, 121, 168, 0.3);
+            border-radius: 20px;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+        }
+
+        .contact-info {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--neon-blue);
+            transform: translateX(10px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .contact-form {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(108, 92, 231, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            background: rgba(5, 5, 16, 0.9);
+            border-top: 1px solid rgba(108, 92, 231, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .scroll-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: var(--neon-blue);
+            transform: scale(1.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 4rem; }
+            .hero-subtitle { font-size: 2rem; }
+            .about-content,
+            .contact-content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .hero-subtitle { font-size: 1.5rem; }
+            .section-title { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.2s;
+        }
+
+        .cursor.hover {
+            transform: scale(1.5);
+            border-color: var(--neon-pink);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader-text">ABDUL HADI</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo">AHD</a>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-dot active" data-section="home"></div>
+        <div class="scroll-dot" data-section="about"></div>
+        <div class="scroll-dot" data-section="projects"></div>
+        <div class="scroll-dot" data-section="contact"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span id="letter1">A</span>
+                <span id="letter2">B</span>
+                <span id="letter3">D</span>
+                <span id="letter4">U</span>
+                <span id="letter5">L</span>
+                <span id="letter6">&nbsp;</span>
+                <span id="letter7">H</span>
+                <span id="letter8">A</span>
+                <span id="letter9">D</span>
+                <span id="letter10">I</span>
+            </h1>
+            <div class="hero-subtitle" id="subtitle">Full Stack Developer & UI/UX Designer</div>
+            <p class="hero-description" id="description">
+                Creating immersive digital experiences with cutting-edge animations and modern web technologies. 
+                Transforming ideas into interactive realities that captivate and engage.
+            </p>
+            <a href="#projects" class="cta-button" id="ctaButton">
+                Explore My Work
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="floating-elements">
+            <div class="floating-element" id="float1"></div>
+            <div class="floating-element" id="float2"></div>
+            <div class="floating-element" id="float3"></div>
+            <div class="floating-element" id="float4"></div>
+            <div class="floating-element" id="float5"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title" id="aboutTitle">About Me</h2>
+            <div class="about-content">
+                <div class="about-text" id="aboutText">
+                    <h3>The Creative Developer</h3>
+                    <p>Passionate full-stack developer with expertise in creating dynamic, animated web experiences. 
+                    Specializing in GSAP animations, React, and modern UI/UX design principles.</p>
+                    <p>I believe in pushing the boundaries of what's possible on the web, creating experiences that 
+                    not only look stunning but also feel intuitive and engaging.</p>
+                    
+                    <div class="skills-container" id="skillsContainer">
+                        <div class="skill" id="skill1">GSAP</div>
+                        <div class="skill" id="skill2">JavaScript</div>
+                        <div class="skill" id="skill3">React</div>
+                        <div class="skill" id="skill4">Node.js</div>
+                        <div class="skill" id="skill5">UI/UX Design</div>
+                        <div class="skill" id="skill6">CSS3</div>
+                        <div class="skill" id="skill7">Three.js</div>
+                        <div class="skill" id="skill8">Figma</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section-title" id="projectsTitle">My Projects</h2>
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projects will be loaded dynamically -->
+            </div>
+            <div style="text-align: center; margin-top: 4rem;">
+                <button class="cta-button" id="loadMoreBtn">
+                    Load More Projects
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title" id="contactTitle">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info" id="contactInfo">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Email</h3>
+                            <p>abdul.hadi@example.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>+92 300 123 4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Location</h3>
+                            <p>Karachi, Pakistan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form" id="contactForm">
+                    <form id="contactFormElement">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            Send Message
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <p class="copyright">© 2024 Abdul Hadi. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Wait for page to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize GSAP
+            gsap.registerPlugin(ScrollTrigger, TextPlugin);
+            
+            // Custom cursor
+            const cursor = document.getElementById('cursor');
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1
+                });
+            });
+            
+            // Cursor hover effect
+            document.querySelectorAll('a, button, .skill, .project-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+            
+            // Hide preloader with GSAP animation
+            gsap.to('.preloader', {
+                opacity: 0,
+                duration: 1,
+                delay: 2,
+                onComplete: () => {
+                    document.getElementById('preloader').style.display = 'none';
+                    // Start main animations
+                    initAnimations();
+                }
+            });
+            
+            // Preloader text animation
+            gsap.fromTo('.loader-text', 
+                { scale: 0.5, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 1.5, ease: 'back.out(1.7)' }
+            );
+            
+            // Navbar animation on scroll
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                const navbar = document.getElementById('navbar');
+                
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    gsap.to(navbar, { y: -100, duration: 0.5 });
+                } else {
+                    gsap.to(navbar, { y: 0, duration: 0.5 });
+                }
+                lastScroll = currentScroll;
+                
+                // Update scroll indicator
+                updateScrollIndicator();
+            });
+            
+            // Scroll indicator dots click
+            document.querySelectorAll('.scroll-dot').forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const section = dot.getAttribute('data-section');
+                    document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Update scroll indicator
+            function updateScrollIndicator() {
+                const sections = ['home', 'about', 'projects', 'contact'];
+                const dots = document.querySelectorAll('.scroll-dot');
+                
+                let currentSection = 'home';
+                sections.forEach(section => {
+                    const element = document.getElementById(section);
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                        currentSection = section;
+                    }
+                });
+                
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.getAttribute('data-section') === currentSection) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
+            
+            // Main animations function
+            function initAnimations() {
+                // Hero section animations
+                const letters = document.querySelectorAll('.hero-title span');
+                letters.forEach((letter, index) => {
+                    gsap.fromTo(letter, 
+                        { 
+                            opacity: 0, 
+                            y: 100, 
+                            rotation: -10 
+                        },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            rotation: 0, 
+                            duration: 1, 
+                            delay: index * 0.1,
+                            ease: 'back.out(1.7)'
+                        }
+                    );
+                });
+                
+                // Subtitle animation
+                gsap.fromTo('#subtitle',
+                    { opacity: 0, x: -100 },
+                    { 
+                        opacity: 1, 
+                        x: 0, 
+                        duration: 1.5, 
+                        delay: 1.2,
+                        ease: 'power3.out'
+                    }
+                );
+                
+                // Description animation
+                gsap.fromTo('#description',
+                    { opacity: 0, y: 50 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1.5, 
+                        delay: 1.8,
+                        ease: 'power3.out'
+                    }
+                );
+                
+                // CTA Button animation
+                gsap.fromTo('#ctaButton',
+                    { opacity: 0, y: 50 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1, 
+                        delay: 2.3,
+                        ease: 'back.out(1.7)'
+                    }
+                );
+                
+                // Floating elements animation
+                const floats = document.querySelectorAll('.floating-element');
+                floats.forEach((float, index) => {
+                    gsap.to(float, {
+                        y: 'random(-100, 100)',
+                        x: 'random(-50, 50)',
+                        rotation: 'random(-30, 30)',
+                        duration: 'random(3, 5)',
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                        delay: index * 0.2
+                    });
+                });
+                
+                // Section titles animation with ScrollTrigger
+                gsap.fromTo('.section-title',
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: '.section',
+                            start: 'top 80%',
+                            end: 'top 20%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+                
+                // About section animation
+                gsap.fromTo('#aboutText',
+                    { opacity: 0, x: -50 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1.2,
+                        scrollTrigger: {
+                            trigger: '#about',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+                
+                // Skills animation
+                const skills = document.querySelectorAll('.skill');
+                skills.forEach((skill, index) => {
+                    gsap.fromTo(skill,
+                        { opacity: 0, scale: 0.8 },
+                        {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.6,
+                            delay: index * 0.1,
+                            scrollTrigger: {
+                                trigger: '#skillsContainer',
+                                start: 'top 80%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
+                
+                // Load projects
+                loadProjects();
+                
+                // Contact section animations
+                gsap.fromTo('#contactInfo',
+                    { opacity: 0, x: -50 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: '#contact',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+                
+                gsap.fromTo('#contactForm',
+                    { opacity: 0, x: 50 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: 1,
+                        delay: 0.3,
+                        scrollTrigger: {
+                            trigger: '#contact',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+                
+                // Contact form submission
+                document.getElementById('contactFormElement').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const button = this.querySelector('.submit-btn');
+                    const originalText = button.innerHTML;
+                    
+                    // Animate button
+                    gsap.to(button, {
+                        scale: 0.9,
+                        duration: 0.2,
+                        onComplete: () => {
+                            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                            gsap.to(button, { scale: 1, duration: 0.2 });
+                            
+                            // Simulate sending
+                            setTimeout(() => {
+                                // Success animation
+                                gsap.to(button, {
+                                    background: 'linear-gradient(45deg, #00ff9d, #00f3ff)',
+                                    duration: 0.5
+                                });
+                                
+                                button.innerHTML = '<i class="fas fa-check"></i> Sent Successfully!';
+                                
+                                // Reset after 2 seconds
+                                setTimeout(() => {
+                                    button.innerHTML = originalText;
+                                    gsap.to(button, {
+                                        background: 'linear-gradient(45deg, var(--primary), var(--accent))',
+                                        duration: 0.5
+                                    });
+                                    this.reset();
+                                }, 2000);
+                            }, 1500);
+                        }
+                    });
+                });
+                
+                // Load more projects button
+                document.getElementById('loadMoreBtn').addEventListener('click', loadMoreProjects);
+                
+                // Navbar links animation on hover
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('mouseenter', () => {
+                        gsap.to(link, {
+                            scale: 1.1,
+                            color: 'var(--neon-blue)',
+                            duration: 0.3
+                        });
+                    });
+                    
+                    link.addEventListener('mouseleave', () => {
+                        gsap.to(link, {
+                            scale: 1,
+                            color: link.classList.contains('active') ? 'var(--neon-blue)' : 'white',
+                            duration: 0.3
+                        });
+                    });
+                });
+                
+                // Active nav link on scroll
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('.nav-links a');
+                
+                function updateActiveLink() {
+                    let current = '';
+                    
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.clientHeight;
+                        
+                        if (scrollY >= sectionTop - 200) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+                    
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === current) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+                
+                window.addEventListener('scroll', updateActiveLink);
+                
+                // Add some random animations to elements on mouse move
+                document.addEventListener('mousemove', (e) => {
+                    const x = e.clientX / window.innerWidth;
+                    const y = e.clientY / window.innerHeight;
+                    
+                    // Parallax effect for floating elements
+                    gsap.to('.floating-element', {
+                        x: x * 50,
+                        y: y * 50,
+                        duration: 1,
+                        ease: 'power2.out'
+                    });
+                });
+            }
+            
+            // Project data
+            const projects = [
+                {
+                    title: "Animated E-Commerce Platform",
+                    description: "A cutting-edge e-commerce website with GSAP animations, 3D product views, and interactive shopping experience.",
+                    tags: ["GSAP", "React", "Three.js", "Node.js"],
+                    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "Interactive Dashboard",
+                    description: "Real-time analytics dashboard with animated charts, live data updates, and customizable widgets.",
+                    tags: ["GSAP", "D3.js", "Vue.js", "WebSocket"],
+                    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "3D Portfolio Website",
+                    description: "Immersive portfolio with Three.js 3D scenes, scroll-triggered animations, and interactive elements.",
+                    tags: ["Three.js", "GSAP", "WebGL", "JavaScript"],
+                    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "Music Visualizer",
+                    description: "Interactive music visualization tool with real-time audio analysis and dynamic visual effects.",
+                    tags: ["Web Audio API", "Canvas", "GSAP", "JavaScript"],
+                    image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "AR Shopping App",
+                    description: "Augmented Reality shopping application with virtual try-on and interactive product displays.",
+                    tags: ["AR.js", "React Native", "GSAP", "Three.js"],
+                    image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "Crypto Trading Platform",
+                    description: "Advanced cryptocurrency trading platform with real-time charts and animated transaction effects.",
+                    tags: ["WebSocket", "Chart.js", "GSAP", "React"],
+                    image: "https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                }
+            ];
+            
+            let displayedProjects = 3;
+            
+            // Load initial projects
+            function loadProjects() {
+                const grid = document.getElementById('projectsGrid');
+                grid.innerHTML = '';
+                
+                const initialProjects = projects.slice(0, displayedProjects);
+                
+                initialProjects.forEach((project, index) => {
+                    const card = createProjectCard(project, index);
+                    grid.appendChild(card);
+                    
+                    // Animate card entrance with delay
+                    gsap.fromTo(card,
+                        { opacity: 0, y: 50 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            delay: index * 0.2,
+                            scrollTrigger: {
+                                trigger: card,
+                                start: 'top 90%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
+            }
+            
+            // Create project card
+            function createProjectCard(project, index) {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-image">
+                        <img src="${project.image}" alt="${project.title}">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-tags">
+                            ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Add hover animation
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.05,
+                        boxShadow: '0 30px 60px rgba(0, 243, 255, 0.3)',
+                        duration: 0.3
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        boxShadow: '0 20px 40px rgba(0, 243, 255, 0.2)',
+                        duration: 0.3
+                    });
+                });
+                
+                return card;
+            }
+            
+            // Load more projects
+            function loadMoreProjects() {
+                const grid = document.getElementById('projectsGrid');
+                const button = document.getElementById('loadMoreBtn');
+                
+                // Animate button click
+                gsap.to(button, {
+                    scale: 0.9,
+                    duration: 0.2,
+                    onComplete: () => {
+                        gsap.to(button, { scale: 1, duration: 0.2 });
+                        
+                        if (displayedProjects >= projects.length) {
+                            // All projects loaded
+                            gsap.to(button, {
+                                opacity: 0.5,
+                                duration: 0.3,
+                                onComplete: () => {
+                                    button.innerHTML = '<i class="fas fa-check"></i> All Projects Loaded';
+                                    button.disabled = true;
+                                }
+                            });
+                            return;
+                        }
+                        
+                        // Add more projects
+                        const newProjects = projects.slice(displayedProjects, displayedProjects + 3);
+                        newProjects.forEach((project, index) => {
+                            const card = createProjectCard(project, displayedProjects + index);
+                            grid.appendChild(card);
+                            
+                            // Animate new card entrance
+                            gsap.fromTo(card,
+                                { opacity: 0, y: 50 },
+                                {
+                                    opacity: 1,
+                                    y: 0,
+                                    duration: 0.8,
+                                    delay: index * 0.2
+                                }
+                            );
+                        });
+                        
+                        displayedProjects += 3;
+                        
+                        // Update button text if all projects are loaded
+                        if (displayedProjects >= projects.length) {
+                            button.innerHTML = 'All Projects Loaded <i class="fas fa-check"></i>';
+                        }
+                    }
+                });
+            }
+            
+            // Add some random effects on page
+            function addRandomEffects() {
+                // Random color flashes
+                setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        gsap.to('body', {
+                            backgroundColor: 'rgba(0, 243, 255, 0.05)',
+                            duration: 0.5,
+                            yoyo: true,
+                            repeat: 1
+                        });
+                    }
+                }, 3000);
+                
+                // Random element shakes
+                setInterval(() => {
+                    const elements = document.querySelectorAll('.skill, .tag');
+                    if (elements.length > 0 && Math.random() > 0.8) {
+                        const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                        gsap.to(randomElement, {
+                            rotation: 'random(-10, 10)',
+                            duration: 0.2,
+                            yoyo: true,
+                            repeat: 1
+                        });
+                    }
+                }, 2000);
+            }
+            
+            // Start random effects
+            setTimeout(addRandomEffects, 5000);
+        });
+    </script>
+</body>
+</html>
